@@ -1,27 +1,32 @@
-import json 
+import json
+
 
 class MediaItem:
-
     all_media = []
 
     def __init__(self, media_type, format, title, artist, year):
         self.media_type = media_type
         self.format = format
-        self.title = title 
-        self.artist = artist 
+        self.title = title
+        self.artist = artist
         self.year = year
-    
+
     def add_item_to_list(self):
         MediaItem.all_media.append(self)
 
     def to_dict(self):
-        return {"Media Type": self.media_type,"Format": self.format, "Title": self.title, "Artist": self.artist, "Year": self.year }
-        
+        return {
+            "Media Type": self.media_type,
+            "Format": self.format,
+            "Title": self.title,
+            "Artist": self.artist,
+            "Year": self.year,
+        }
 
     @classmethod
-    def save_json(cls, filename = "app_info.json"):
+    def save_json(cls, filename="app_info.json"):
         data = [item.to_dict() for item in cls.all_media]
-        with open(filename, "w", encoding = "utf-8") as file:
+        with open(filename, "w", encoding="utf-8") as file:
             json.dump(data, file, ensure_ascii=False, indent=4)
 
     @classmethod
@@ -40,7 +45,7 @@ class MediaItem:
                     spec["Format"],
                     spec["Title"],
                     spec["Artist"],
-                    spec["Year"]
+                    spec["Year"],
                 )
                 cls.all_media.append(media_item)
         except FileNotFoundError:
@@ -51,10 +56,10 @@ class MediaItem:
     @classmethod
     def create_from_input(cls):
         media_type = input("Enter media type: ")
-        format = input ("Enter media format: ") 
+        format = input("Enter media format: ")
         title = input("Enter media title: ")
-        artist  = (input("Enter media artist: "))
-        
+        artist = input("Enter media artist: ")
+
         while True:
             try:
                 year = int(input("Enter year of release: "))
@@ -65,10 +70,14 @@ class MediaItem:
         media_item = cls(media_type, format, title, artist, year)
         media_item.add_item_to_list()
         print(f"Media {title} added successfully!")
+
     @classmethod
     def show_all(cls):
-         for item in cls.all_media:
-              print(f"{item.media_type}, {item.format}, {item.title}, {item.artist}, {item.year}")     
+        for item in cls.all_media:
+            print(
+                f"{item.media_type}, {item.format}, {item.title}, {item.artist}, {item.year}"
+            )
+
 
 MediaItem.load_from_json()
 if __name__ == "__main__":
@@ -76,4 +85,3 @@ if __name__ == "__main__":
     MediaItem.create_from_input()
     MediaItem.save_json()
     MediaItem.show_all()
-
